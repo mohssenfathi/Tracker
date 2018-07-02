@@ -13,8 +13,13 @@ import AVFoundation
 class CameraViewController: UIViewController {
 
     @IBOutlet weak var renderView: View!
+    @IBOutlet weak var colorIndicator: UIView!
     
     let camera = Camera()
+    
+    /// Filters
+    let filterGroup = FilterGroup()
+    let colorIsolator = ColorIsolator()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,7 +27,18 @@ class CameraViewController: UIViewController {
         camera.orientation = .landscapeRight
         renderView.contentMode = .scaleAspectFill
         
-        camera --> renderView
+        filterGroup += colorIsolator
+        
+        camera --> filterGroup --> renderView
+        
+        
+        /// Color Indicator
+        colorIndicator.layer.masksToBounds = true
+        colorIndicator.layer.cornerRadius = colorIndicator.bounds.width/2.0
+        colorIndicator.layer.borderColor = UIColor.black.cgColor
+        colorIndicator.layer.borderWidth = 2.0
+        colorIndicator.backgroundColor = .clear
+        
         
 //        let resize = Resize()
 //        resize.outputSize = MTLSize(width: 140, height: 100, depth: 1)
@@ -33,21 +49,23 @@ class CameraViewController: UIViewController {
 //        camera --> colorIsolator --> renderView
     }
 
-    
+    @IBAction func sliderValueChanged(_ sender: UISlider) {
+        colorIsolator.threshold = sender.value
+    }
     
     @IBAction func handleTap(_ sender: UITapGestureRecognizer) {
         
-        let location = sender.location(in: renderView) / renderView.bounds.size
+        let location = sender.location(in: renderView) // / renderView.bounds.size
         
         guard let snapshot = renderView.snapshotImage() else { return }
-//        let snapshot = UIImage(view: snapshotView)
         currentSnapshot = snapshot
         
-        guard let color = snapshot[Int(location.x * snapshot.size.width), Int(location.y * snapshot.size.height)] else {
+        guard let color = snapshot.pixelColor(at: location) else {
             return
         }
-        print(color)
-//        colorMask.color = color
+        
+        colorIndicator.backgroundColor = color
+        colorIsolator.color = color
     }
     
     private var currentSnapshot: UIImage?

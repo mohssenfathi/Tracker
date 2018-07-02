@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14269.12" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina5_9" orientation="landscape">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14252.5"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -26,17 +27,37 @@
                                     <outletCollection property="gestureRecognizers" destination="czV-t5-zBx" appends="YES" id="Jtk-ik-WxP"/>
                                 </connections>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5OO-nm-0NW">
+                                <rect key="frame" x="706" y="292" width="50" height="50"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="5OO-nm-0NW" secondAttribute="height" id="gSC-4P-6f0"/>
+                                    <constraint firstAttribute="height" constant="50" id="rhE-uJ-JJI"/>
+                                </constraints>
+                            </view>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="ggj-kS-eJt">
+                                <rect key="frame" x="48" y="304" width="702" height="31"/>
+                                <connections>
+                                    <action selector="sliderValueChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="oDs-UH-BhY"/>
+                                </connections>
+                            </slider>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="XPt-wW-Za9" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="1Rg-uB-Sgi"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="ggj-kS-eJt" secondAttribute="trailing" constant="20" id="6Dh-m5-rcx"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="5OO-nm-0NW" secondAttribute="bottom" constant="12" id="Bfc-96-SbC"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="5OO-nm-0NW" secondAttribute="trailing" constant="12" id="J3a-3d-bi1"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="ggj-kS-eJt" secondAttribute="bottom" constant="20" id="Pjh-PY-6XL"/>
                             <constraint firstAttribute="bottom" secondItem="XPt-wW-Za9" secondAttribute="bottom" id="Ri6-Sr-IXm"/>
+                            <constraint firstItem="ggj-kS-eJt" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="50" id="mlE-xv-Ld9"/>
                             <constraint firstAttribute="trailing" secondItem="XPt-wW-Za9" secondAttribute="trailing" id="n34-Og-lJc"/>
                             <constraint firstItem="XPt-wW-Za9" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="nsX-NC-qeb"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="colorIndicator" destination="5OO-nm-0NW" id="bq8-nV-Tmq"/>
                         <outlet property="renderView" destination="XPt-wW-Za9" id="nTq-rl-nJU"/>
                     </connections>
                 </viewController>
@@ -47,6 +68,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
+            <point key="canvasLocation" x="138.91625615763547" y="117.59999999999999"/>
         </scene>
     </scenes>
 </document>
