@@ -14,12 +14,16 @@ class CameraViewController: UIViewController {
 
     @IBOutlet weak var renderView: View!
     @IBOutlet weak var colorIndicator: UIView!
+    @IBOutlet weak var toolbar: UIView!
     
     let camera = Camera()
     
     /// Filters
     let filterGroup = FilterGroup()
     let colorIsolator = ColorIsolator()
+    let colorPosition = ColorPosition()
+    let rectRenderer = RectRenderer()
+    let rectView = UIView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,9 +32,22 @@ class CameraViewController: UIViewController {
         renderView.contentMode = .scaleAspectFill
         
         filterGroup += colorIsolator
+        filterGroup += colorPosition
+//        filterGroup += rectRenderer
         
         camera --> filterGroup --> renderView
         
+        colorPosition.newRectAvailable = { colorPosition in
+            self.rectView.isHidden = colorPosition.normalizedRect == .zero
+            self.rectView.frame = colorPosition.normalizedRect * self.renderView.bounds.size
+        }
+        
+        rectView.backgroundColor = .clear
+        rectView.layer.borderColor = UIColor.red.cgColor
+        rectView.layer.borderWidth = 2.0
+        rectView.isUserInteractionEnabled = false
+        rectView.isHidden = true
+        view.addSubview(rectView)
         
         /// Color Indicator
         colorIndicator.layer.masksToBounds = true
@@ -55,7 +72,11 @@ class CameraViewController: UIViewController {
     
     @IBAction func handleTap(_ sender: UITapGestureRecognizer) {
         
-        let location = sender.location(in: renderView) // / renderView.bounds.size
+        let location = sender.location(in: renderView)
+        
+        guard !toolbar.frame.contains(location) else {
+            return
+        }
         
         guard let snapshot = renderView.snapshotImage() else { return }
         currentSnapshot = snapshot
@@ -66,6 +87,7 @@ class CameraViewController: UIViewController {
         
         colorIndicator.backgroundColor = color
         colorIsolator.color = color
+        colorPosition.color = color
     }
     
     private var currentSnapshot: UIImage?
@@ -79,3 +101,13 @@ func /(lhs: CGRect, rhs: CGRect) -> CGRect {
         height: lhs.size.height / rhs.size.height
     )
 }
+
+func *(lhs: CGRect, rhs: CGSize) -> CGRect {
+    return CGRect(
+        x: lhs.origin.x * rhs.width,
+        y: lhs.origin.y * rhs.height,
+        width: lhs.size.width * rhs.width,
+        height: lhs.size.height * rhs.height
+    )
+}
+
